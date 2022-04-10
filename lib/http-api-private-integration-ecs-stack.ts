@@ -105,6 +105,10 @@ export class HttpApiPrivateIntegrationEcsStack extends Stack {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Setup ECS service
+     *
+     */
     private setupEcsService = () => {
 
         //Creating the ECS cluster
@@ -172,6 +176,10 @@ export class HttpApiPrivateIntegrationEcsStack extends Stack {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Setup VPC endpoints for ECR
+     *
+     */
     private setupVpcEndpointsForEcr = () => {
         //Get private/isolated subnets
         const selectedSubnets = this.vpc.selectSubnets({
@@ -226,6 +234,10 @@ export class HttpApiPrivateIntegrationEcsStack extends Stack {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Setup API Gateway vpc links
+     *
+     */
     private setupApiGatewayVpcLink = () => {
         //Get private/isolated subnets
         const selectedSubnets = this.vpc.selectSubnets({
