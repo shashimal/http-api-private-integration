@@ -58,6 +58,10 @@ export class HttpApiPrivateIntegrationEcsStack extends Stack {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Setup VPC
+     *
+     */
     private setupVpc = () => {
         this.vpc = new Vpc(this, 'VPC', {
             maxAzs: 2,
@@ -67,13 +71,18 @@ export class HttpApiPrivateIntegrationEcsStack extends Stack {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Setup ALB and configuration
+     *
+     */
     private setupAlb = () => {
+        //Creating security group for ALB
         const internalAlbSg = new SecurityGroup(this, 'InternalAlbSg', {
             vpc: this.vpc,
         });
         internalAlbSg.addIngressRule(Peer.anyIpv4(), Port.tcp(80));
 
-
+        //Creating and internal ALB
         this.internalAlb = new ApplicationLoadBalancer(this, 'InternalAlb', {
             vpc: this.vpc,
             internetFacing: false,
@@ -81,24 +90,24 @@ export class HttpApiPrivateIntegrationEcsStack extends Stack {
             securityGroup: internalAlbSg
         });
 
+        //Add a listener for ALB
         this.internalAlbListener = this.internalAlb.addListener('InternalHttpListener', {
             port: 80
         });
 
+        //Add the default action
         this.internalAlbListener.addAction('DefaultAction', {
             action: ListenerAction.fixedResponse(200, {
                 messageBody: "No routes defined"
             })
         });
-
-
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private setupEcsService = () => {
 
-        //Creating the ECS task cluster
+        //Creating the ECS cluster
         const ecsCluster = new Cluster(this, 'ECSCluster', {
             clusterName: 'SampleApi',
             vpc: this.vpc
