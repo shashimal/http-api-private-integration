@@ -235,7 +235,7 @@ export class HttpApiPrivateIntegrationEcsStack extends Stack {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Setup API Gateway vpc links
+     * Setup API Gateway vpc link
      *
      */
     private setupApiGatewayVpcLink = () => {
